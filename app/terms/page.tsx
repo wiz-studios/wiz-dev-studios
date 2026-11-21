@@ -1,6 +1,6 @@
 export default function TermsPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
         Terms & Conditions
       </h1>
@@ -36,6 +36,6 @@ export default function TermsPage() {
       >
         ← Back to Home
       </a>
-    </main>
+    </article>
   )
 }

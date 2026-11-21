@@ -1,66 +1,41 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Work_Sans, Open_Sans } from "next/font/google"
+import type { ReactNode } from "react"
+import type { Metadata, Viewport } from "next"
+import { GeistSans } from "geist/font/sans"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navigation } from "@/components/navigation"
-import {Footer} from "@/components/footer"
+import { Footer } from "@/components/footer"
 import "./globals.css"
-import { Suspense } from "react"
+import "./studio.css"
 
-/* Added Work Sans and Open Sans fonts as specified in design brief */
-const workSans = Work_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-work-sans",
-  weight: ["400", "600", "700"],
-})
-
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-open-sans",
-  weight: ["400", "500", "600"],
-})
+const title = "Wiz Dev Studios | Web & Software Development"
+const description = "A Nairobi-based development studio building web applications, custom software, and cloud infrastructure."
 
 export const metadata: Metadata = {
-  title: "Wiz Dev Studios - Scalable Web & Software Solutions",
-  description:
-    "Transforming ideas into digital products. Professional web development, software solutions, and DevOps services.",
-  generator: "v0.app",
-  keywords: ["web development", "software development", "DevOps", "fullstack", "portfolio"],
+  title,
+  description,
   authors: [{ name: "Wiz Dev Studios" }],
-  openGraph: {
-    title: "Wiz Dev Studios - Scalable Web & Software Solutions",
-    description:
-      "Transforming ideas into digital products. Professional web development, software solutions, and DevOps services.",
-    type: "website",
-  },
+  openGraph: { title, description, type: "website", siteName: "Wiz Dev Studios" },
+  other: { "page-type": "service", "site-kind": "other" },
+}
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f7f9" },
+    { media: "(prefers-color-scheme: dark)", color: "#111923" },
+  ],
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${workSans.variable} ${openSans.variable} antialiased`}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="flex min-h-screen flex-col">
-              <Navigation />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-          </ThemeProvider>
-          <Analytics />
-        </Suspense>
+    <html lang="en" data-type="service" suppressHydrationWarning>
+      <body className={GeistSans.variable}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <a className="studio-skip" href="#main-content">Skip to content</a>
+          <Navigation />
+          <main className="studio-main" id="main-content" tabIndex={-1}>{children}</main>
+          <Footer />
+        </ThemeProvider>
+        {process.env.VERCEL === "1" && <Analytics />}
       </body>
     </html>
   )

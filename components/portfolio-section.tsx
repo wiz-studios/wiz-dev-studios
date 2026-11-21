@@ -1,283 +1,138 @@
 "use client"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, Filter } from "lucide-react"
+import { useSyncExternalStore } from "react"
 import Image from "next/image"
-import { ScrollAnimation, StaggerContainer, StaggerItem } from "./scroll-animations"
 
-type ProjectCategory = "All" | "Web" | "Software" | "Fullstack"
+const filters = [
+  { value: "all", label: "All work" },
+  { value: "web", label: "Web" },
+  { value: "software", label: "Software" },
+  { value: "fullstack", label: "Full stack" },
+] as const
 
-interface Project {
-  id: string
-  title: string
-  description: string
-  category: ProjectCategory
-  technologies: string[]
-  image: string
-  demoUrl?: string
-  githubUrl?: string
-  featured?: boolean
+const projects = [
+  {
+    title: "E-commerce platform",
+    description: "An admin dashboard for inventory, orders, and payments.",
+    category: "fullstack",
+    technology: "Next.js · Stripe · PostgreSQL",
+    image: "/modern-ecommerce-dashboard.webp",
+    alt: "Dark commerce dashboard with sales graphs, order rows, and a category breakdown",
+  },
+  {
+    title: "Task management app",
+    description: "A shared workspace for assigning tasks and tracking project progress in real time.",
+    category: "web",
+    technology: "React · Node.js · Socket.io",
+    image: "/task-management-interface.webp",
+    alt: "A task list with assignee avatars and colored status labels",
+  },
+  {
+    title: "Desktop analytics tool",
+    description: "A cross-platform desktop app for exploring data and building reports.",
+    category: "software",
+    technology: "Electron · D3.js · SQLite",
+    image: "/analytics-dashboard-desktop-app.webp",
+    alt: "A desktop analytics interface with charts and reporting panels",
+  },
+  {
+    title: "Healthcare management system",
+    description: "One workspace for patient records, appointments, and telemedicine.",
+    category: "fullstack",
+    technology: "Vue.js · Laravel · WebRTC",
+    image: "/healthcare-management-system.webp",
+    alt: "A healthcare interface mockup with patient cards and a data flow diagram",
+  },
+  {
+    title: "Portfolio website builder",
+    description: "A drag-and-drop editor for creatives and agencies to assemble portfolio sites.",
+    category: "web",
+    technology: "React · Express.js · AWS S3",
+    image: "/website-builder-interface.webp",
+    alt: "A visual website editor with a page preview and editing controls",
+  },
+  {
+    title: "API gateway service",
+    description: "A gateway for routing and monitoring microservice traffic, with authentication and rate limiting.",
+    category: "software",
+    technology: "Go · Kubernetes · Prometheus",
+    image: "/api-gateway-architecture.webp",
+    alt: "Architecture diagram connecting an API gateway to backend services",
+  },
+] as const
+
+const filterChange = "portfolio-filter-change"
+
+function subscribe(callback: () => void) {
+  window.addEventListener("popstate", callback)
+  window.addEventListener(filterChange, callback)
+  return () => {
+    window.removeEventListener("popstate", callback)
+    window.removeEventListener(filterChange, callback)
+  }
 }
 
-const projects: Project[] = [
-  {
-    id: "1",
-    title: "E-Commerce Platform",
-    description:
-      "A modern, scalable e-commerce solution with real-time inventory management, payment processing, and admin dashboard.",
-    category: "Fullstack",
-    technologies: ["Next.js", "TypeScript", "Stripe", "PostgreSQL", "Tailwind CSS"],
-    image: "/modern-ecommerce-dashboard.png",
-    demoUrl: "#",
-    githubUrl: "#",
-    featured: true,
-  },
-  {
-    id: "2",
-    title: "Task Management App",
-    description:
-      "Collaborative project management tool with real-time updates, team collaboration, and advanced analytics.",
-    category: "Web",
-    technologies: ["React", "Node.js", "Socket.io", "MongoDB", "Material-UI"],
-    image: "/task-management-interface.png",
-    demoUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: "3",
-    title: "Desktop Analytics Tool",
-    description:
-      "Cross-platform desktop application for data visualization and business intelligence with advanced reporting.",
-    category: "Software",
-    technologies: ["Electron", "React", "D3.js", "SQLite", "Chart.js"],
-    image: "/analytics-dashboard-desktop-app.png",
-    demoUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: "4",
-    title: "Healthcare Management System",
-    description:
-      "Comprehensive healthcare platform with patient records, appointment scheduling, and telemedicine features.",
-    category: "Fullstack",
-    technologies: ["Vue.js", "Laravel", "MySQL", "WebRTC", "Bootstrap"],
-    image: "/healthcare-management-system.png",
-    demoUrl: "#",
-    githubUrl: "#",
-    featured: true,
-  },
-  {
-    id: "5",
-    title: "Portfolio Website Builder",
-    description: "Drag-and-drop website builder specifically designed for creative professionals and agencies.",
-    category: "Web",
-    technologies: ["React", "Express.js", "AWS S3", "Redis", "Styled Components"],
-    image: "/website-builder-interface.png",
-    demoUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: "6",
-    title: "API Gateway Service",
-    description: "Microservices API gateway with rate limiting, authentication, monitoring, and load balancing.",
-    category: "Software",
-    technologies: ["Go", "Docker", "Kubernetes", "Redis", "Prometheus"],
-    image: "/api-gateway-architecture.png",
-    demoUrl: "#",
-    githubUrl: "#",
-  },
-]
+function getFilter() {
+  const value = new URLSearchParams(window.location.search).get("work")
+  return filters.find((filter) => filter.value === value)?.value ?? "all"
+}
 
-const categories: ProjectCategory[] = ["All", "Web", "Software", "Fullstack"]
+function getDefaultFilter() {
+  return "all" as const
+}
 
 export function PortfolioSection() {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>("All")
+  const filter = useSyncExternalStore(subscribe, getFilter, getDefaultFilter)
+  const visibleProjects = filter === "all" ? projects : projects.filter((project) => project.category === filter)
 
-  const filteredProjects =
-    activeCategory === "All" ? projects : projects.filter((project) => project.category === activeCategory)
+  function selectFilter(value: (typeof filters)[number]["value"]) {
+    if (value === filter) return
+    const url = new URL(window.location.href)
+    if (value === "all") url.searchParams.delete("work")
+    else url.searchParams.set("work", value)
+    url.hash = "portfolio"
+    window.history.pushState(null, "", url)
+    window.dispatchEvent(new Event(filterChange))
+  }
 
   return (
-    <section id="portfolio" className="py-20 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <ScrollAnimation className="text-center mb-16">
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-foreground mb-4">
-            Featured <span className="text-primary">Projects</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Explore my latest work showcasing innovative solutions across web development, software engineering, and
-            full-stack applications.
-          </p>
-        </ScrollAnimation>
-
-        {/* Filter Buttons */}
-        <ScrollAnimation delay={0.2} className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category, index) => (
-            <motion.div
-              key={category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant={activeCategory === category ? "default" : "outline"}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2 transition-all duration-300 ${
-                  activeCategory === category
-                    ? "bg-primary text-primary-foreground shadow-lg"
-                    : "border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                }`}
+    <section id="portfolio" className="studio-work studio-section" aria-labelledby="work-title" tabIndex={-1}>
+      <div className="studio-shell">
+        <div className="studio-work-head">
+          <h2 id="work-title">Selected work<span>.</span></h2>
+          <div className="studio-filters" role="group" aria-label="Filter projects">
+            {filters.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={filter === value}
+                aria-controls="work-grid"
+                onClick={() => selectFilter(value)}
               >
-                <Filter className="w-4 h-4 mr-2" />
-                {category}
-              </Button>
-            </motion.div>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="sr-only" aria-live="polite">{visibleProjects.length} projects shown</p>
+        <div id="work-grid" className="studio-project-grid">
+          {visibleProjects.map((project) => (
+            <article key={project.title} className="studio-project">
+              <div className="studio-project-image">
+                <Image src={project.image} alt={project.alt} fill sizes="(max-width: 680px) 100vw, (max-width: 1350px) 50vw, 620px" />
+              </div>
+              <div className="studio-project-content">
+                <p className="studio-project-category">{filters.find(({ value }) => value === project.category)?.label}</p>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <p className="studio-project-tools">{project.technology}</p>
+              </div>
+            </article>
           ))}
-        </ScrollAnimation>
-
-        {/* Projects Grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
-            <StaggerItem key={project.id}>
-              <motion.div
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              >
-                <Card
-                  className={`group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-card ${
-                    project.featured ? "ring-2 ring-accent/20" : ""
-                  }`}
-                >
-                  {/* Project Image */}
-                  <div className="relative overflow-hidden">
-                    <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.5 }}>
-                      <Image
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        width={500}
-                        height={300}
-                        className="w-full h-48 object-cover"
-                      />
-                    </motion.div>
-                    {project.featured && (
-                      <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">Featured</Badge>
-                      </motion.div>
-                    )}
-                    <motion.div
-                      className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4"
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                    >
-                      {project.demoUrl && (
-                        <motion.div
-                          initial={{ y: 20, opacity: 0 }}
-                          whileHover={{ y: 0, opacity: 1 }}
-                          transition={{ delay: 0.1 }}
-                        >
-                          <Button size="sm" variant="secondary" asChild>
-                            <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              Demo
-                            </a>
-                          </Button>
-                        </motion.div>
-                      )}
-                      {project.githubUrl && (
-                        <motion.div
-                          initial={{ y: 20, opacity: 0 }}
-                          whileHover={{ y: 0, opacity: 1 }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          <Button size="sm" variant="secondary" asChild>
-                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                              <Github className="w-4 h-4 mr-2" />
-                              Code
-                            </a>
-                          </Button>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  </div>
-
-                  <CardContent className="p-6">
-                    {/* Project Title */}
-                    <motion.h3
-                      className="font-heading font-semibold text-xl text-card-foreground mb-3 group-hover:text-primary transition-colors"
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      {project.title}
-                    </motion.h3>
-
-                    {/* Project Description */}
-                    <p className="text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
-
-                    {/* Technologies */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech, techIndex) => (
-                        <motion.div
-                          key={tech}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.6 + techIndex * 0.05 }}
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <Badge
-                            variant="secondary"
-                            className="text-xs bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
-                          >
-                            {tech}
-                          </Badge>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Category Badge */}
-                    <Badge variant="outline" className="border-primary text-primary">
-                      {project.category}
-                    </Badge>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-
-        {/* View More Button */}
-        <ScrollAnimation delay={0.4} className="text-center mt-12">
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <a
-              href="https://ronoh-portfolio-14.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'inline-block', textDecoration: 'none' }}
-            >
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 bg-transparent"
-              >
-                View All Projects
-                <ExternalLink className="ml-2 h-5 w-5" />
-              </Button>
-            </a>
-          </motion.div>
-        </ScrollAnimation>
+        </div>
+        <a className="studio-text-link studio-more-work" href="https://ronoh-portfolio-14.vercel.app/">
+          Explore the developer portfolio
+        </a>
       </div>
     </section>
   )
