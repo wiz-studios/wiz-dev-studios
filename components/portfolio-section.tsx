@@ -14,7 +14,7 @@ const filters = [
 const projects = [
   {
     title: "E-commerce platform",
-    description: "An admin dashboard for inventory, orders, and payments.",
+    description: "Manage orders, stock, and payments in one admin dashboard.",
     category: "fullstack",
     technology: "Next.js · Stripe · PostgreSQL",
     image: "/modern-ecommerce-dashboard.webp",
@@ -38,7 +38,7 @@ const projects = [
   },
   {
     title: "Healthcare management system",
-    description: "One workspace for patient records, appointments, and telemedicine.",
+    description: "A single workspace for patient records, appointment scheduling, and virtual care.",
     category: "fullstack",
     technology: "Vue.js · Laravel · WebRTC",
     image: "/healthcare-management-system.webp",
@@ -116,20 +116,32 @@ export function PortfolioSection() {
           </div>
         </div>
         <p className="sr-only" aria-live="polite">{visibleProjects.length} projects shown</p>
-        <div id="work-grid" className="studio-project-grid">
-          {visibleProjects.map((project) => (
-            <article key={project.title} className="studio-project">
-              <div className="studio-project-image">
-                <Image src={project.image} alt={project.alt} fill sizes="(max-width: 620px) 92vw, (max-width: 1024px) 46vw, (max-width: 1440px) 29vw, 420px" />
-              </div>
-              <div className="studio-project-content">
-                <p className="studio-project-category">{filters.find(({ value }) => value === project.category)?.label}</p>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <p className="studio-project-tools">{project.technology}</p>
-              </div>
-            </article>
-          ))}
+        <div id="work-grid" className="studio-project-list">
+          {visibleProjects.map((project, index) => {
+            const featured = filter === "all" && index === 0
+            return (
+              <article key={project.title} className="studio-project" data-featured={featured ? "" : undefined}>
+                <div className="studio-project-image">
+                  <Image
+                    src={project.image}
+                    alt={project.alt}
+                    fill
+                    sizes={featured ? "(max-width: 760px) 92vw, 800px" : "(max-width: 760px) 32vw, 240px"}
+                  />
+                </div>
+                <div className="studio-project-content">
+                  <div>
+                    <p className="studio-project-category">{filters.find(({ value }) => value === project.category)?.label}</p>
+                    <h3>{project.title}</h3>
+                  </div>
+                  <div className="studio-project-summary">
+                    <p>{project.description}</p>
+                    <p className="studio-project-tools">{project.technology}</p>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
         </div>
         <a className="studio-text-link studio-more-work" href="https://ronoh-portfolio-14.vercel.app/">
           Explore the developer portfolio <ArrowUpRight size={17} aria-hidden="true" />

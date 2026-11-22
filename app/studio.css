@@ -1,33 +1,34 @@
 :root {
   color-scheme: light;
-  --studio-paper: #f5f6fa;
+  --studio-paper: #f5f6f8;
   --studio-surface: #fff;
-  --studio-ink: #151727;
-  --studio-muted: #54596d;
-  --studio-line: #cfd3e0;
-  --studio-control: #85899f;
-  --studio-accent: #2541d9;
-  --studio-focus: #2541d9;
+  --studio-ink: #171a20;
+  --studio-muted: #4c535f;
+  --studio-line: #cfd4dd;
+  --studio-control: #7b8290;
+  --studio-accent: #006678;
+  --studio-accent-soft: #e2f1f4;
+  --studio-focus: var(--studio-accent);
   --studio-blue: #233acf;
   --studio-blue-hover: #192ea9;
   --studio-blue-soft: #e9edff;
   --studio-error: #ad2835;
-  --studio-night: #111322;
+  --studio-danger-fill: #ad2835;
+  --studio-night: #171a20;
   --studio-gutter: clamp(1.25rem, 5vw, 5rem);
   --studio-bar-height: 4.375rem;
-  --studio-ease: cubic-bezier(.2, .8, .2, 1);
 }
 
 .dark {
   color-scheme: dark;
-  --studio-paper: #111320;
-  --studio-surface: #191c2d;
-  --studio-ink: #f4f5ff;
-  --studio-muted: #bfc3d6;
-  --studio-line: #383d55;
-  --studio-control: #747b95;
-  --studio-accent: #a5b3ff;
-  --studio-focus: #a5b3ff;
+  --studio-paper: #14171c;
+  --studio-surface: #1d2128;
+  --studio-ink: #f1f3f5;
+  --studio-muted: #c1c7d2;
+  --studio-line: #3b424f;
+  --studio-control: #7a8392;
+  --studio-accent: #8de0ed;
+  --studio-accent-soft: #20363d;
   --studio-blue: #354ae1;
   --studio-blue-hover: #4359ec;
   --studio-blue-soft: #232b4e;
@@ -42,12 +43,22 @@ body {
   margin: 0;
   background: var(--studio-paper);
   color: var(--studio-ink);
-  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  font-family: var(--font-studio-body), "Segoe UI", sans-serif;
+  font-size: 1rem;
+}
+
+:where(h1, h2, h3) {
+  font-family: var(--font-studio-display), "Segoe UI", sans-serif;
+  text-wrap: balance;
+}
+
+:where(p) {
+  text-wrap: pretty;
 }
 
 ::selection {
-  background: #bfcaff;
-  color: #111322;
+  background: var(--studio-accent-soft);
+  color: var(--studio-ink);
 }
 
 :where(a, button, summary, input, textarea, select, [tabindex]):focus-visible {
@@ -113,7 +124,8 @@ body {
   gap: 0.65rem;
   width: fit-content;
   min-height: 44px;
-  font-size: 1.04rem;
+  font-family: var(--font-studio-display), "Segoe UI", sans-serif;
+  font-size: 1.06rem;
   font-weight: 660;
   letter-spacing: -0.025em;
   white-space: nowrap;
@@ -147,7 +159,7 @@ body {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 530;
 }
 
@@ -162,7 +174,7 @@ body {
 
 .studio-header-actions {
   justify-content: end;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .studio-button {
@@ -177,25 +189,19 @@ body {
   border-radius: 0.25rem;
   background: var(--studio-blue);
   color: #fff;
-  font-size: 0.93rem;
+  font-size: 1rem;
   font-weight: 620;
   text-align: center;
   cursor: pointer;
-  transition: background-color 160ms ease, transform 160ms var(--studio-ease);
+  transition: background-color 160ms ease;
 }
 
 .studio-button:hover {
   background: var(--studio-blue-hover);
-  transform: translateY(-1px);
-}
-
-.studio-button:active {
-  transform: translateY(1px);
 }
 
 .studio-button:disabled {
-  opacity: 0.7;
-  transform: none;
+  background: color-mix(in srgb, var(--studio-blue) 82%, var(--studio-paper));
   cursor: wait;
 }
 
@@ -261,23 +267,17 @@ body {
 
 .studio-hero-intro {
   min-width: 0;
-  animation: studio-enter 580ms var(--studio-ease) both;
 }
 
 .studio-hero h1,
 .studio-section h2 {
-  font-weight: 615;
-  letter-spacing: -0.045em;
+  font-weight: 710;
+  letter-spacing: -0.035em;
 }
 
 .studio-hero h1 {
-  font-size: clamp(3rem, 12vw, 4.9rem);
-  line-height: 0.99;
-}
-
-.studio-hero h1 span {
-  display: block;
-  color: var(--studio-accent);
+  font-size: clamp(2.65rem, 10.75vw, 4.9rem);
+  line-height: 1.01;
 }
 
 .studio-hero-intro p,
@@ -306,7 +306,7 @@ body {
   min-height: 44px;
   width: fit-content;
   color: var(--studio-accent);
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 595;
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 46%, transparent);
@@ -315,6 +315,13 @@ body {
 
 .studio-text-link:hover {
   text-decoration-color: currentColor;
+}
+
+.studio-inline-link {
+  color: var(--studio-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+  overflow-wrap: anywhere;
 }
 
 .studio-hero-art,
@@ -332,18 +339,6 @@ body {
 .studio-hero-art img,
 .studio-project-image img {
   object-fit: cover;
-}
-
-.studio-hero-art img {
-  animation: studio-picture-settle 780ms var(--studio-ease) both;
-}
-
-@keyframes studio-enter {
-  from { transform: translateY(10px); opacity: 0.76; }
-}
-
-@keyframes studio-picture-settle {
-  from { transform: scale(1.035); }
 }
 
 .studio-section {
@@ -374,16 +369,16 @@ body {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.38rem;
+  gap: 0.5rem;
 }
 
 .studio-filters button {
   min-height: 44px;
-  padding: 0.4rem 0.85rem;
+  padding: 0.4rem 0.75rem;
   border: 1px solid var(--studio-line);
   border-radius: 0.22rem;
   color: var(--studio-muted);
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 560;
   white-space: nowrap;
   cursor: pointer;
@@ -401,56 +396,65 @@ body {
   border-color: var(--studio-ink);
 }
 
-.studio-project-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2rem clamp(1rem, 2.25vw, 1.75rem);
-}
-
 .studio-project {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.32fr) minmax(0, 0.68fr);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2.5rem);
   min-width: 0;
+  padding-block: clamp(1rem, 2vw, 1.75rem);
   border-bottom: 1px solid var(--studio-line);
 }
 
 .studio-project-image {
-  flex: none;
-  aspect-ratio: 16 / 10;
-  background: var(--studio-blue-soft);
+  aspect-ratio: 4 / 3;
+  background: var(--studio-paper);
 }
 
 .studio-project-content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: start;
-  padding-block: 1.1rem 1.25rem;
+  display: grid;
+  align-self: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.studio-project[data-featured] {
+  grid-template-columns: minmax(0, 1fr);
+  padding-block-start: 0;
+}
+
+.studio-project[data-featured] .studio-project-image {
+  aspect-ratio: 16 / 10;
+}
+
+.studio-project[data-featured] h3 {
+  max-width: 13ch;
+  font-size: clamp(2.15rem, 4.3vw, 3.85rem);
+  line-height: 1.03;
 }
 
 .studio-project-content h3,
 .studio-service-list h3 {
   font-size: clamp(1.35rem, 2.05vw, 1.85rem);
-  font-weight: 620;
+  font-weight: 675;
   line-height: 1.15;
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
 .studio-project-category {
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.25rem;
   color: var(--studio-accent);
-  font-size: 0.83rem;
   font-weight: 625;
 }
 
-.studio-project-content > p:not(.studio-project-category) {
-  margin-top: 0.55rem;
+.studio-project-summary {
+  max-width: 48ch;
   color: var(--studio-muted);
 }
 
 .studio-project-tools {
-  font-size: 0.88rem;
+  margin-top: 0.32rem;
 }
 
 .studio-more-work {
@@ -512,16 +516,7 @@ body {
 .studio-service-list .studio-service-examples {
   margin-top: 0.6rem;
   color: #fff;
-  font-size: 0.87rem;
   font-weight: 540;
-}
-
-.studio-contact h2 {
-  text-wrap: initial;
-}
-
-.studio-contact h2 span {
-  color: var(--studio-accent);
 }
 
 .studio-email {
@@ -542,9 +537,6 @@ body {
 
 .studio-form {
   min-width: 0;
-  padding: clamp(1rem, 3vw, 2rem);
-  border: 1px solid var(--studio-line);
-  background: var(--studio-surface);
 }
 
 .studio-form-fields,
@@ -562,7 +554,7 @@ body {
   display: grid;
   gap: 0.42rem;
   min-width: 0;
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 560;
 }
 
@@ -573,7 +565,7 @@ body {
   padding: 0.62rem 0.75rem;
   border: 1px solid var(--studio-control);
   border-radius: 0.2rem;
-  background: var(--studio-paper);
+  background: var(--studio-surface);
   color: var(--studio-ink);
   font-size: 1rem;
   font-weight: 400;
@@ -598,7 +590,7 @@ body {
   padding-block: 0.65rem;
   list-style: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .studio-form-options summary::-webkit-details-marker {
@@ -643,9 +635,9 @@ body {
 }
 
 .studio-footer {
-  --studio-accent: #b9c6ff;
-  --studio-focus: #b9c6ff;
-  color: #f6f7ff;
+  --studio-accent: #8de0ed;
+  --studio-focus: var(--studio-accent);
+  color: #f1f3f5;
   background: var(--studio-night);
   padding-block: 1.65rem 0.95rem;
 }
@@ -667,15 +659,22 @@ body {
 .studio-footer-meta {
   margin-top: 0.9rem;
   padding-top: 0.45rem;
-  border-top: 1px solid #424761;
-  color: #bfc4d9;
-  font-size: 0.875rem;
+  border-top: 1px solid #49515e;
+  color: #c1c7d2;
+}
+
+.studio-legal {
+  max-width: 61ch;
+}
+
+.studio-legal-return {
+  margin-top: 1rem;
 }
 
 @media (max-width: 360px) {
   .studio-brand {
     gap: 0.45rem;
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .studio-filters {
@@ -687,12 +686,6 @@ body {
 
 @media (min-width: 480px) {
   .studio-form-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 621px) {
-  .studio-project-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -722,7 +715,7 @@ body {
   }
 
   .studio-hero h1 {
-    font-size: clamp(3.05rem, 6.4vw, 6.1rem);
+    font-size: clamp(3rem, 5.95vw, 5.65rem);
   }
 
   .studio-hero-art {
@@ -732,6 +725,19 @@ body {
   .studio-work-head {
     flex-direction: row;
     align-items: end;
+  }
+
+  .studio-project {
+    grid-template-columns: minmax(9rem, 15rem) minmax(0, 1fr);
+  }
+
+  .studio-project[data-featured] {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 0.95fr);
+  }
+
+  .studio-project[data-featured] .studio-project-content {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
   }
 
   .studio-services-grid {
@@ -744,15 +750,13 @@ body {
 }
 
 @media (min-width: 1025px) {
-  .studio-project-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    row-gap: 2.45rem;
+  .studio-project-content {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 1.5rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .studio-hero-intro,
-  .studio-hero-art img,
   .studio-spinner {
     animation: none;
   }
@@ -760,10 +764,5 @@ body {
   .studio-button,
   .studio-filters button {
     transition: none;
-  }
-
-  .studio-button:hover,
-  .studio-button:active {
-    transform: none;
   }
 }

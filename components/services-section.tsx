@@ -4,7 +4,7 @@ const services = [
   {
     title: "Web development",
     icon: AppWindow,
-    description: "Responsive websites and web apps, with performance, SEO, and accessibility considered from the start.",
+    description: "Responsive websites and web apps with accessible layouts, search metadata, and performance checks.",
     examples: "Marketing sites · E-commerce · Web applications",
   },
   {
@@ -27,7 +27,7 @@ export function ServicesSection() {
       <div className="studio-shell studio-services-grid">
         <div className="studio-services-intro">
           <h2 id="services-title">What we build</h2>
-          <p>From the website your customers see to the systems your team works with every day.</p>
+          <p>Hire us to launch a website, replace a manual workflow, or automate software releases.</p>
         </div>
         <ul className="studio-service-list">
           {services.map(({ title, description, examples, icon: Icon }) => (

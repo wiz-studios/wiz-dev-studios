@@ -10,11 +10,8 @@ export default function HomePage() {
       <section id="home" className="studio-hero" aria-labelledby="hero-title">
         <div className="studio-shell studio-hero-layout">
           <div className="studio-hero-intro">
-            <h1 id="hero-title">
-              Websites &amp;<br className="studio-hero-break" /> software{" "}
-              <span>that work.</span>
-            </h1>
-            <p>We build websites, custom software, and cloud infrastructure from our studio in Nairobi.</p>
+            <h1 id="hero-title">Websites, software, and cloud systems</h1>
+            <p>From Nairobi, we build sites for customers, tools for teams, and the infrastructure that runs them.</p>
             <div className="studio-hero-actions">
               <a className="studio-button" href="#contact">
                 Start a project <ArrowRight size={18} aria-hidden="true" />

@@ -1,12 +1,12 @@
 export default function TermsPage() {
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <article className="studio-shell studio-legal py-16">
       <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
         Terms & Conditions
       </h1>
 
       <p className="text-muted-foreground mb-4">
-        Welcome to <span className="font-semibold">Ty Collections</span>. By
+        Welcome to <span className="font-semibold">Wiz Dev Studios</span>. By
         accessing or purchasing from our website, you agree to the following
         terms and conditions.
       </p>
@@ -24,7 +24,7 @@ export default function TermsPage() {
 
       <p className="text-muted-foreground mb-4">
         If you have any questions about these Terms, please{" "}
-        <a href="/#contact" className="text-primary hover:underline">
+        <a href="/#contact" className="studio-inline-link">
           reach out to us
         </a>
         .
@@ -32,9 +32,9 @@ export default function TermsPage() {
 
       <a
         href="/"
-        className="inline-block mt-6 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition"
+        className="studio-button studio-legal-return"
       >
-        ← Back to Home
+        Back to home
       </a>
     </article>
   )
