@@ -43,7 +43,7 @@ export function HeroSection() {
           {/* Main Heading */}
           <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-7xl text-foreground mb-6 leading-tight">
             We build{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">scalable web</span>
+            <span className="text-primary">scalable web</span>
             <br />& software solutions
           </h1>
 

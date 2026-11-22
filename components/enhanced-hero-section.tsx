@@ -104,7 +104,7 @@ export function EnhancedHeroSection() {
           >
             We build{" "}
             <motion.span
-              className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"
+              className="text-primary"
               animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
