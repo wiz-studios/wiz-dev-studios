@@ -14,9 +14,14 @@ const sections = [
 
 export function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [themeReady, setThemeReady] = useState(false)
   const menuToggle = useRef<HTMLButtonElement>(null)
   const { resolvedTheme, setTheme } = useTheme()
   const sectionBase = usePathname() === "/" ? "" : "/"
+
+  useEffect(() => {
+    setThemeReady(true)
+  }, [])
 
   useEffect(() => {
     if (!menuOpen) return
@@ -50,6 +55,7 @@ export function Navigation() {
             className="studio-icon-button studio-theme-button"
             type="button"
             aria-label="Toggle color theme"
+            aria-pressed={themeReady ? resolvedTheme === "dark" : undefined}
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           >
             <Moon className="studio-moon" size={18} aria-hidden="true" />

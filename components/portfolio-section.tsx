@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react"
 import Image from "next/image"
+import { ArrowUpRight } from "lucide-react"
 
 const filters = [
   { value: "all", label: "All work" },
@@ -99,7 +100,7 @@ export function PortfolioSection() {
     <section id="portfolio" className="studio-work studio-section" aria-labelledby="work-title" tabIndex={-1}>
       <div className="studio-shell">
         <div className="studio-work-head">
-          <h2 id="work-title">Selected work<span>.</span></h2>
+          <h2 id="work-title">Selected work</h2>
           <div className="studio-filters" role="group" aria-label="Filter projects">
             {filters.map(({ value, label }) => (
               <button
@@ -119,7 +120,7 @@ export function PortfolioSection() {
           {visibleProjects.map((project) => (
             <article key={project.title} className="studio-project">
               <div className="studio-project-image">
-                <Image src={project.image} alt={project.alt} fill sizes="(max-width: 680px) 100vw, (max-width: 1350px) 50vw, 620px" />
+                <Image src={project.image} alt={project.alt} fill sizes="(max-width: 620px) 92vw, (max-width: 1024px) 46vw, (max-width: 1440px) 29vw, 420px" />
               </div>
               <div className="studio-project-content">
                 <p className="studio-project-category">{filters.find(({ value }) => value === project.category)?.label}</p>
@@ -131,7 +132,7 @@ export function PortfolioSection() {
           ))}
         </div>
         <a className="studio-text-link studio-more-work" href="https://ronoh-portfolio-14.vercel.app/">
-          Explore the developer portfolio
+          Explore the developer portfolio <ArrowUpRight size={17} aria-hidden="true" />
         </a>
       </div>
     </section>

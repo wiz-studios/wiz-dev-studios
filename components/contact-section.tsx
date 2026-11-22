@@ -75,7 +75,7 @@ export function ContactSection() {
     <section id="contact" className="studio-contact studio-section" aria-labelledby="contact-title" tabIndex={-1}>
       <div className="studio-shell studio-contact-grid">
         <div className="studio-contact-intro">
-          <h2 id="contact-title">Tell us what you’re building<span>.</span></h2>
+          <h2 id="contact-title">Let’s build your next project<span>.</span></h2>
           <p>Share a little about the problem, who it affects, and what you’d like to change.</p>
           <a className="studio-text-link studio-email" href={`mailto:${emailAddress}`}>{emailAddress}</a>
           <div className="studio-contact-links">
